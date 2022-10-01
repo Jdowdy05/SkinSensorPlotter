@@ -107,22 +107,53 @@ def quadPlotter(i: int):
 
     #still needs work
 
-    fig, ax = plt.subplots(2,2)
+    fig, ax = plt.subplots(2,2,figsize=(8, 5))
     
     csvResistanceA = pd.read_csv(csvPaths[i-3])
-    aPlot = csvResistanceA.plot.scatter(x="Time - Force(N)", y="F - Force(N)", alpha=0.5)
+    csvResistanceA.plot.scatter(ax=ax[0,0], x="Time - Force(N)", y="F - Force(N)", alpha=0.5)
     csvResistanceB = pd.read_csv(csvPaths[i-2])
-    bPlot = csvResistanceB.plot.scatter(x="Time - Force(N)", y="F - Force(N)", alpha=0.5)
+    csvResistanceB.plot.scatter(ax=ax[0,1],x="Time - Force(N)", y="F - Force(N)", alpha=0.5)
     csvResistanceC = pd.read_csv(csvPaths[i-1])
-    cPlot = csvResistanceC.plot.scatter(x="Time - Plot 0", y="Amplitude - Plot 0", alpha=0.5)
+    csvResistanceC.plot.scatter(ax=ax[1,1],x="Time - Plot 0", y="Amplitude - Plot 0", alpha=0.5)
     csvResistanceD = pd.read_csv(csvPaths[i])
-    dPlot = csvResistanceD.plot.scatter(x="Time - Plot 0", y="Amplitude - Plot 0", alpha=0.5)
-    ax[0,0].plot(aPlot)
-    ax[0,1].plot(bPlot)
-    plt.show()
+    csvResistanceD.plot.scatter(ax=ax[1,0],x="Time - Plot 0", y="Amplitude - Plot 0", alpha=0.5)
+    aPlotName = namingPlotter(i-3)
+    bPlotName = namingPlotter(i-2)
+    cPlotName = namingPlotter(i-1)
+    dPlotName = namingPlotter(i)
+    
+    ax[0,0].set_title(aPlotName)
+    ax[0,1].set_title(bPlotName)
+    ax[1,1].set_title(cPlotName)
+    ax[1,0].set_title(dPlotName)
+
+    ax[0,0].set_xlabel('Time (miliseconds)', fontsize=15)
+    ax[0,0].set_ylabel("Force (newtons)", fontsize=15)
+    ax[0,1].set_xlabel('Time (miliseconds)', fontsize=15)
+    ax[0,1].set_ylabel("Force (newtons)", fontsize=15)
+    ax[1,1].set_xlabel('Time (miliseconds)', fontsize=15)
+    ax[1,1].set_ylabel("Amplitude (ohms)", fontsize=15)
+    ax[1,0].set_xlabel('Time (miliseconds)', fontsize=15)
+    ax[1,0].set_ylabel("Amplitude (ohms)", fontsize=15)
+
+    fig.tight_layout()
+    try:
+
+        plt.savefig(cwd+"/figures/" + aPlotName[:7] + ".png", dpi=1200)
+
+    except:
+        pass
+
+    try:
+        plt.savefig(cwd+"\\figures\\" + aPlotName[:8] + ".png", dpi=1200)
+
+    except:
+        print("save error. make sure the figures dir is in the same place as the python file.")
+
+    plt.close()
 
 def main():
-
+    print(csvPaths)
     i = 0
     for path in csvPaths:
         print(path)
@@ -133,8 +164,8 @@ def main():
             
             resistancePlotter(i)
         if (i+1)%4 == 0:
-            #quadPlotter(i)
-            pass
+            quadPlotter(i)
+            
         i+=1
 
 
