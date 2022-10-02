@@ -106,40 +106,58 @@ def quadPlotter(i: int):
     #this is to plot all four of a type onto one plot
 
     #still needs work
-
+    nameSeq = [0,0,0,0]
     fig, ax = plt.subplots(2,2,figsize=(8, 5))
-    
-    csvResistanceA = pd.read_csv(csvPaths[i-3])
-    csvResistanceA.plot.scatter(ax=ax[0,0], x="Time - Force(N)", y="F - Force(N)", alpha=0.5)
-    csvResistanceB = pd.read_csv(csvPaths[i-2])
-    csvResistanceB.plot.scatter(ax=ax[0,1],x="Time - Force(N)", y="F - Force(N)", alpha=0.5)
-    csvResistanceC = pd.read_csv(csvPaths[i-1])
-    csvResistanceC.plot.scatter(ax=ax[1,1],x="Time - Plot 0", y="Amplitude - Plot 0", alpha=0.5)
-    csvResistanceD = pd.read_csv(csvPaths[i])
-    csvResistanceD.plot.scatter(ax=ax[1,0],x="Time - Plot 0", y="Amplitude - Plot 0", alpha=0.5)
-    aPlotName = namingPlotter(i-3)
-    bPlotName = namingPlotter(i-2)
-    cPlotName = namingPlotter(i-1)
-    dPlotName = namingPlotter(i)
-    
-    ax[0,0].set_title(aPlotName)
-    ax[0,1].set_title(bPlotName)
-    ax[1,1].set_title(cPlotName)
-    ax[1,0].set_title(dPlotName)
+    q=3
+    for path in csvPaths[i-3:i+1]:
+        
+        if (("force" or "Force" ) in path and "0.5" in path):
 
-    ax[0,0].set_xlabel('Time (miliseconds)', fontsize=15)
-    ax[0,0].set_ylabel("Force (newtons)", fontsize=15)
-    ax[0,1].set_xlabel('Time (miliseconds)', fontsize=15)
-    ax[0,1].set_ylabel("Force (newtons)", fontsize=15)
-    ax[1,1].set_xlabel('Time (miliseconds)', fontsize=15)
-    ax[1,1].set_ylabel("Amplitude (ohms)", fontsize=15)
-    ax[1,0].set_xlabel('Time (miliseconds)', fontsize=15)
-    ax[1,0].set_ylabel("Amplitude (ohms)", fontsize=15)
+            csvResistanceA = pd.read_csv(path)
+            csvResistanceA.plot.scatter(ax=ax[0,1], x="Time - Force(N)", y="F - Force(N)", alpha=0.5)
+            nameSeq[1] = q
+
+        if (("force" or "Force" ) in path and  "1N" in path):
+            csvResistanceA = pd.read_csv(path)
+            csvResistanceA.plot.scatter(ax=ax[0,0], x="Time - Force(N)", y="F - Force(N)", alpha=0.5)
+            nameSeq[0]=q
+
+        if (("sensor" or "Sensor") in path and "0.5" in path):
+           
+            csvResistanceB = pd.read_csv(path)
+            csvResistanceB.plot.scatter(ax=ax[1,1],x="Time - Plot 0", y="Amplitude - Plot 0", alpha=0.5)
+            nameSeq[3] = q
+
+        if (("sensor" or "Sensor") in path and "1N" in path):
+           
+            csvResistanceB = pd.read_csv(path)
+            csvResistanceB.plot.scatter(ax=ax[1,0],x="Time - Plot 0", y="Amplitude - Plot 0", alpha=0.5)
+            nameSeq[2] = q
+        q-=1
+
+    aPlotName = namingPlotter(i-nameSeq[0])
+    bPlotName = namingPlotter(i-nameSeq[1])
+    cPlotName = namingPlotter(i-nameSeq[2])
+    dPlotName = namingPlotter(i-nameSeq[3])
+    
+    ax[0,0].set_title(aPlotName, fontsize=12)
+    ax[0,1].set_title(bPlotName, fontsize=12)
+    ax[1,0].set_title(cPlotName, fontsize=12)
+    ax[1,1].set_title(dPlotName, fontsize=12)
+
+    ax[0,0].set_xlabel('Time (miliseconds)', fontsize=10)
+    ax[0,0].set_ylabel("Force (newtons)", fontsize=10)
+    ax[0,1].set_xlabel('Time (miliseconds)', fontsize=10)
+    ax[0,1].set_ylabel("Force (newtons)", fontsize=10)
+    ax[1,1].set_xlabel('Time (miliseconds)', fontsize=10)
+    ax[1,1].set_ylabel("Amplitude (ohms)", fontsize=10)
+    ax[1,0].set_xlabel('Time (miliseconds)', fontsize=10)
+    ax[1,0].set_ylabel("Amplitude (ohms)", fontsize=10)
 
     fig.tight_layout()
     try:
 
-        plt.savefig(cwd+"/figures/" + aPlotName[:7] + ".png", dpi=1200)
+        plt.savefig(cwd+"/figures/" + aPlotName[:8] + ".png", dpi=1200)
 
     except:
         pass
@@ -153,11 +171,12 @@ def quadPlotter(i: int):
     plt.close()
 
 def main():
-    print(csvPaths)
-    i = 0
+
+    i = 0    
     for path in csvPaths:
         print(path)
         if (("force" or "Force") in path):
+            
             forcePlotter(i)
 
         if (("sensor" or "Sensor") in path):
