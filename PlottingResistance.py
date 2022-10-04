@@ -42,11 +42,12 @@ def forcePlotter(i: int):
     #plots the data of the force
     csvData = pd.read_csv(csvPaths[i])
     #print(csvData)
-    csvData.plot.scatter(x="Time - Force(N)", y="F - Force(N)", alpha=0.5)
+    csvData.plot.line(x="Time - Force(N)", y="F - Force(N)")
     plt.ylabel("Force (newtons)", size=16)
     plt.xlabel("Time (milliseconds)", size=16)
     plotName = namingPlotter(i)
     plt.title(plotName)
+    plt.legend().remove()
 
     try:
 
@@ -67,11 +68,12 @@ def resistancePlotter(i: int):
     #plots the data for the skin sensor
     csvResistance = pd.read_csv(csvPaths[i])
     #print(csvResistance)
-    csvResistance.plot.scatter(x="Time - Plot 0", y="Amplitude - Plot 0", alpha=0.5)
+    csvResistance.plot.line(x="Time - Plot 0", y="Amplitude - Plot 0")
     plt.ylabel("Amplitude (ohms)", size=16)
     plt.xlabel("Time (milliseconds)", size=16)
     plotName = namingPlotter(i)
     plt.title(plotName)
+    plt.legend().remove()
     try:
 
         plt.savefig(cwd+"/figures/" + plotName + ".png", dpi=1200)
@@ -114,24 +116,24 @@ def quadPlotter(i: int):
         if (("force" or "Force" ) in path and "0.5" in path):
 
             csvResistanceA = pd.read_csv(path)
-            csvResistanceA.plot.scatter(ax=ax[0,1], x="Time - Force(N)", y="F - Force(N)", alpha=0.5)
+            csvResistanceA.plot.line(ax=ax[0,1], x="Time - Force(N)", y="F - Force(N)", legend=None)
             nameSeq[1] = q
 
         if (("force" or "Force" ) in path and  "1N" in path):
             csvResistanceA = pd.read_csv(path)
-            csvResistanceA.plot.scatter(ax=ax[0,0], x="Time - Force(N)", y="F - Force(N)", alpha=0.5)
+            csvResistanceA.plot.line(ax=ax[0,0], x="Time - Force(N)", y="F - Force(N)", legend=None)
             nameSeq[0]=q
 
         if (("sensor" or "Sensor") in path and "0.5" in path):
            
             csvResistanceB = pd.read_csv(path)
-            csvResistanceB.plot.scatter(ax=ax[1,1],x="Time - Plot 0", y="Amplitude - Plot 0", alpha=0.5)
+            csvResistanceB.plot.line(ax=ax[1,1],x="Time - Plot 0", y="Amplitude - Plot 0",  legend=None)
             nameSeq[3] = q
 
         if (("sensor" or "Sensor") in path and "1N" in path):
            
             csvResistanceB = pd.read_csv(path)
-            csvResistanceB.plot.scatter(ax=ax[1,0],x="Time - Plot 0", y="Amplitude - Plot 0", alpha=0.5)
+            csvResistanceB.plot.line(ax=ax[1,0],x="Time - Plot 0", y="Amplitude - Plot 0",  legend=None)
             nameSeq[2] = q
         q-=1
 
@@ -149,11 +151,10 @@ def quadPlotter(i: int):
     ax[0,0].set_ylabel("Force (newtons)", fontsize=10)
     ax[0,1].set_xlabel('Time (miliseconds)', fontsize=10)
     ax[0,1].set_ylabel("Force (newtons)", fontsize=10)
-    ax[1,1].set_xlabel('Time (miliseconds)', fontsize=10)
+    ax[1,1].set_xlabel(' ', fontsize=10)
     ax[1,1].set_ylabel("Amplitude (ohms)", fontsize=10)
-    ax[1,0].set_xlabel('Time (miliseconds)', fontsize=10)
+    ax[1,0].set_xlabel(' ', fontsize=10)
     ax[1,0].set_ylabel("Amplitude (ohms)", fontsize=10)
-
     fig.tight_layout()
     try:
 
