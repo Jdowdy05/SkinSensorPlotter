@@ -119,7 +119,7 @@ def quadPlotter(i: int):
             csvResistanceA.plot.line(ax=ax[0,1], x="Time - Force(N)", y="F - Force(N)", legend=None)
             nameSeq[1] = q
 
-        if (("force" or "Force" ) in path and  "1N" in path):
+        if (("force" or "Force" ) in path and ("0.5-2N" not in path)):
             csvResistanceA = pd.read_csv(path)
             csvResistanceA.plot.line(ax=ax[0,0], x="Time - Force(N)", y="F - Force(N)", legend=None)
             nameSeq[0]=q
@@ -130,7 +130,7 @@ def quadPlotter(i: int):
             csvResistanceB.plot.line(ax=ax[1,1],x="Time - Plot 0", y="Amplitude - Plot 0",  legend=None)
             nameSeq[3] = q
 
-        if (("sensor" or "Sensor") in path and "1N" in path):
+        if (("sensor" or "Sensor") in path and ("0.5-2N" not in path)):
            
             csvResistanceB = pd.read_csv(path)
             csvResistanceB.plot.line(ax=ax[1,0],x="Time - Plot 0", y="Amplitude - Plot 0",  legend=None)
